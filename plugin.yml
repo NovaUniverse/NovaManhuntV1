@@ -1,0 +1,6 @@
+name: NovaManhuntV1
+main: net.novauniverse.games.manhunt.v1.NovaManhunt
+description: Novauniverse Manhunt gamemode
+version: 1.0
+depend: [NovaCore, NovaCoreGameEngine]
+softdepend: [NovaGamesTarget]
