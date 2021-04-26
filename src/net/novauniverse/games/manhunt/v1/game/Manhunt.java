@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -37,6 +38,7 @@ import net.zeeraa.novacore.spigot.module.modules.game.elimination.PlayerQuitElim
 import net.zeeraa.novacore.spigot.module.modules.scoreboard.NetherBoardScoreboard;
 import net.zeeraa.novacore.spigot.tasks.SimpleTask;
 import net.zeeraa.novacore.spigot.teams.TeamManager;
+import net.zeeraa.novacore.spigot.utils.ItemBuilder;
 import net.zeeraa.novacore.spigot.utils.PlayerUtils;
 
 public class Manhunt extends Game implements Listener {
@@ -163,6 +165,19 @@ public class Manhunt extends Game implements Listener {
 
 			NetherBoardScoreboard.getInstance().setPlayerNameColor(player, team.getTeamColor());
 
+			switch (team.getRole()) {
+			case HUNTER:
+				VersionIndependantUtils.get().sendTitle(player, ChatColor.RED + "" + ChatColor.BOLD + "Hunter", ChatColor.RED + "Kill the speedrunner to win", 10, 100, 10);
+				break;
+
+			case SPEEDRUNNER:
+				VersionIndependantUtils.get().sendTitle(player, ChatColor.GREEN + "" + ChatColor.BOLD + "Speedrunner", ChatColor.GREEN + "Complete the game to win", 10, 100, 10);
+				break;
+
+			default:
+				break;
+			}
+
 			PlayerUtils.resetMaxHealth(player);
 			PlayerUtils.fullyHealPlayer(player);
 			PlayerUtils.resetPlayerXP(player);
@@ -185,6 +200,12 @@ public class Manhunt extends Game implements Listener {
 			for (World world : Bukkit.getServer().getWorlds()) {
 				world.setGameRuleValue("doImmediateRespawn", "true");
 			}
+		}
+
+		for (World world : Bukkit.getServer().getWorlds()) {
+			world.setGameRuleValue("keepInventory", "true");
+			world.setTime(1000);
+			world.setStorm(false);
 		}
 
 		sendBeginEvent();
@@ -278,7 +299,6 @@ public class Manhunt extends Game implements Listener {
 		if (hasStarted()) {
 			if (!players.contains(e.getPlayer().getUniqueId())) {
 				e.getPlayer().setGameMode(GameMode.SPECTATOR);
-
 			}
 		}
 	}
@@ -295,8 +315,8 @@ public class Manhunt extends Game implements Listener {
 		if (hasStarted()) {
 			e.setKeepInventory(true);
 
-			for (ItemStack item : e.getEntity().getInventory()) {
-				if (item.getType() == null) {
+			for (ItemStack item : e.getEntity().getInventory().getContents()) {
+				if (item == null) {
 					continue;
 				}
 
@@ -304,7 +324,11 @@ public class Manhunt extends Game implements Listener {
 					continue;
 				}
 
-				if (CustomItemManager.getInstance().isType(item, TrackerItem.class)) {
+				// if (CustomItemManager.getInstance().isType(item, TrackerItem.class)) {
+				// continue;
+				// }
+
+				if (ItemBuilder.getItemDisplayName(item).contains("Player tracker")) {
 					continue;
 				}
 
