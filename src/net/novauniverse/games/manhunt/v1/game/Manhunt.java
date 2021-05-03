@@ -316,23 +316,29 @@ public class Manhunt extends Game implements Listener {
 			e.setKeepInventory(true);
 
 			for (ItemStack item : e.getEntity().getInventory().getContents()) {
-				if (item == null) {
-					continue;
+				try {
+					if (item == null) {
+						continue;
+					}
+
+					if (item.getType() == Material.AIR) {
+						continue;
+					}
+
+					// if (CustomItemManager.getInstance().isType(item, TrackerItem.class)) {
+					// continue;
+					// }
+
+					if (ItemBuilder.getItemDisplayName(item) != null) {
+						if (ItemBuilder.getItemDisplayName(item).contains("Player tracker")) {
+							continue;
+						}
+					}
+
+					e.getEntity().getWorld().dropItem(e.getEntity().getLocation(), item.clone());
+				} catch (Exception ex) {
+					ex.printStackTrace();
 				}
-
-				if (item.getType() == Material.AIR) {
-					continue;
-				}
-
-				// if (CustomItemManager.getInstance().isType(item, TrackerItem.class)) {
-				// continue;
-				// }
-
-				if (ItemBuilder.getItemDisplayName(item).contains("Player tracker")) {
-					continue;
-				}
-
-				e.getEntity().getWorld().dropItem(e.getEntity().getLocation(), item.clone());
 			}
 
 			PlayerUtils.clearPlayerInventory(e.getEntity());
