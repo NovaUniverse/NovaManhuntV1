@@ -1,7 +1,9 @@
 package net.novauniverse.games.manhunt.v1.game;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -23,6 +25,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import net.novauniverse.games.manhunt.v1.NovaManhunt;
+import net.novauniverse.games.manhunt.v1.game.event.ManhuntGameEndEvent;
+import net.novauniverse.games.manhunt.v1.game.event.ManhuntGameStartEvent;
 import net.novauniverse.games.manhunt.v1.game.item.TrackerItem;
 import net.novauniverse.games.manhunt.v1.game.team.ManhuntRole;
 import net.novauniverse.games.manhunt.v1.game.team.ManhuntTeam;
@@ -48,6 +52,8 @@ public class Manhunt extends Game implements Listener {
 	private World overworld;
 
 	private Task checkTask;
+
+	private ManhuntRole winner;
 
 	public Manhunt(World overworld) {
 		this.overworld = overworld;
@@ -124,6 +130,8 @@ public class Manhunt extends Game implements Listener {
 			return;
 		}
 
+		winner = ManhuntRole.HUNTER;
+
 		started = true;
 
 		Log.debug("Manhunt", "Player count is " + players.size());
@@ -158,12 +166,16 @@ public class Manhunt extends Game implements Listener {
 			team.addPlayer(player);
 		}
 
+		Map<UUID, ManhuntRole> playerRoles = new HashMap<>();
+
 		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 			player.teleport(overworld.getSpawnLocation());
 
 			ManhuntTeam team = (ManhuntTeam) TeamManager.getTeamManager().getPlayerTeam(player);
 
 			NetherBoardScoreboard.getInstance().setPlayerNameColor(player, team.getTeamColor());
+
+			playerRoles.put(player.getUniqueId(), team.getRole());
 
 			switch (team.getRole()) {
 			case HUNTER:
@@ -210,6 +222,9 @@ public class Manhunt extends Game implements Listener {
 
 		sendBeginEvent();
 
+		ManhuntGameStartEvent e = new ManhuntGameStartEvent(playerRoles);
+		Bukkit.getPluginManager().callEvent(e);
+
 		checkTask = new SimpleTask(new Runnable() {
 			@Override
 			public void run() {
@@ -251,6 +266,9 @@ public class Manhunt extends Game implements Listener {
 			VersionIndependantUtils.get().playSound(p, p.getLocation(), VersionIndependantSound.WITHER_DEATH, 1F, 1F);
 		}
 
+		ManhuntGameEndEvent e = new ManhuntGameEndEvent(winner, reason);
+		Bukkit.getServer().getPluginManager().callEvent(e);
+
 		Task.tryStopTask(checkTask);
 
 		ended = true;
@@ -280,6 +298,8 @@ public class Manhunt extends Game implements Listener {
 			Log.debug("Manhunt", "Enderdragon died");
 
 			ManhuntTeam hunterTeam = NovaManhunt.getTeam(ManhuntRole.HUNTER);
+
+			winner = ManhuntRole.SPEEDRUNNER;
 
 			for (UUID uuid : hunterTeam.getMembers()) {
 				players.remove(uuid);
