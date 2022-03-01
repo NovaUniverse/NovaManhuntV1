@@ -56,6 +56,7 @@ public class Manhunt extends Game implements Listener {
 	private ManhuntRole winner;
 
 	public Manhunt(World overworld) {
+		super(NovaManhunt.getInstance());
 		this.overworld = overworld;
 	}
 
