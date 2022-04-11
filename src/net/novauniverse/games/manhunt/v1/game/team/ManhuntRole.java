@@ -1,6 +1,6 @@
 package net.novauniverse.games.manhunt.v1.game.team;
 
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 
 public enum ManhuntRole {
 	HUNTER("Hunter", ChatColor.RED), SPEEDRUNNER("Speedrunner", ChatColor.GREEN);

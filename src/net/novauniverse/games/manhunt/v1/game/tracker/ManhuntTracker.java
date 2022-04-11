@@ -9,9 +9,9 @@ import org.bukkit.entity.Player;
 
 import net.novauniverse.games.manhunt.v1.game.team.ManhuntRole;
 import net.novauniverse.games.manhunt.v1.game.team.ManhuntTeam;
+import net.zeeraa.novacore.spigot.gameengine.module.modules.game.GameManager;
 import net.zeeraa.novacore.spigot.module.modules.compass.CompassTarget;
 import net.zeeraa.novacore.spigot.module.modules.compass.CompassTrackerTarget;
-import net.zeeraa.novacore.spigot.module.modules.game.GameManager;
 import net.zeeraa.novacore.spigot.teams.TeamManager;
 
 public class ManhuntTracker implements CompassTrackerTarget {

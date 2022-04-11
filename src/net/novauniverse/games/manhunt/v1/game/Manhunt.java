@@ -35,10 +35,10 @@ import net.zeeraa.novacore.commons.tasks.Task;
 import net.zeeraa.novacore.commons.utils.ListUtils;
 import net.zeeraa.novacore.spigot.abstraction.VersionIndependantUtils;
 import net.zeeraa.novacore.spigot.abstraction.enums.VersionIndependantSound;
+import net.zeeraa.novacore.spigot.gameengine.module.modules.game.Game;
+import net.zeeraa.novacore.spigot.gameengine.module.modules.game.GameEndReason;
+import net.zeeraa.novacore.spigot.gameengine.module.modules.game.elimination.PlayerQuitEliminationAction;
 import net.zeeraa.novacore.spigot.module.modules.customitems.CustomItemManager;
-import net.zeeraa.novacore.spigot.module.modules.game.Game;
-import net.zeeraa.novacore.spigot.module.modules.game.GameEndReason;
-import net.zeeraa.novacore.spigot.module.modules.game.elimination.PlayerQuitEliminationAction;
 import net.zeeraa.novacore.spigot.module.modules.scoreboard.NetherBoardScoreboard;
 import net.zeeraa.novacore.spigot.tasks.SimpleTask;
 import net.zeeraa.novacore.spigot.teams.TeamManager;
@@ -174,7 +174,7 @@ public class Manhunt extends Game implements Listener {
 
 			ManhuntTeam team = (ManhuntTeam) TeamManager.getTeamManager().getPlayerTeam(player);
 
-			NetherBoardScoreboard.getInstance().setPlayerNameColor(player, team.getTeamColor());
+			NetherBoardScoreboard.getInstance().setPlayerNameColorBungee(player, team.getTeamColor());
 
 			playerRoles.put(player.getUniqueId(), team.getRole());
 
