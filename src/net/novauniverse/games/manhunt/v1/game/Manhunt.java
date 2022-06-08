@@ -33,8 +33,8 @@ import net.novauniverse.games.manhunt.v1.game.team.ManhuntTeam;
 import net.zeeraa.novacore.commons.log.Log;
 import net.zeeraa.novacore.commons.tasks.Task;
 import net.zeeraa.novacore.commons.utils.ListUtils;
-import net.zeeraa.novacore.spigot.abstraction.VersionIndependantUtils;
-import net.zeeraa.novacore.spigot.abstraction.enums.VersionIndependantSound;
+import net.zeeraa.novacore.spigot.abstraction.VersionIndependentUtils;
+import net.zeeraa.novacore.spigot.abstraction.enums.VersionIndependentSound;
 import net.zeeraa.novacore.spigot.gameengine.module.modules.game.Game;
 import net.zeeraa.novacore.spigot.gameengine.module.modules.game.GameEndReason;
 import net.zeeraa.novacore.spigot.gameengine.module.modules.game.elimination.PlayerQuitEliminationAction;
@@ -180,11 +180,11 @@ public class Manhunt extends Game implements Listener {
 
 			switch (team.getRole()) {
 			case HUNTER:
-				VersionIndependantUtils.get().sendTitle(player, ChatColor.RED + "" + ChatColor.BOLD + "Hunter", ChatColor.RED + "Kill the speedrunner to win", 10, 100, 10);
+				VersionIndependentUtils.get().sendTitle(player, ChatColor.RED + "" + ChatColor.BOLD + "Hunter", ChatColor.RED + "Kill the speedrunner to win", 10, 100, 10);
 				break;
 
 			case SPEEDRUNNER:
-				VersionIndependantUtils.get().sendTitle(player, ChatColor.GREEN + "" + ChatColor.BOLD + "Speedrunner", ChatColor.GREEN + "Complete the game to win", 10, 100, 10);
+				VersionIndependentUtils.get().sendTitle(player, ChatColor.GREEN + "" + ChatColor.BOLD + "Speedrunner", ChatColor.GREEN + "Complete the game to win", 10, 100, 10);
 				break;
 
 			default:
@@ -264,7 +264,7 @@ public class Manhunt extends Game implements Listener {
 			PlayerUtils.clearPlayerInventory(p);
 			PlayerUtils.resetPlayerXP(p);
 			p.setGameMode(GameMode.SPECTATOR);
-			VersionIndependantUtils.get().playSound(p, p.getLocation(), VersionIndependantSound.WITHER_DEATH, 1F, 1F);
+			VersionIndependentUtils.get().playSound(p, p.getLocation(), VersionIndependentSound.WITHER_DEATH, 1F, 1F);
 		}
 
 		ManhuntGameEndEvent e = new ManhuntGameEndEvent(winner, reason);
